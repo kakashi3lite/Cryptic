@@ -11,6 +11,9 @@ import SwiftData
 struct DraftEditorView: View {
     @Environment(\.modelContext) private var modelContext
     @Bindable var draft: Draft
+    @State private var proposal: LLMAssistantProposal? = nil
+    @State private var preview: EncodeResult? = nil
+    @State private var errorMessage: String? = nil
 
     var body: some View {
         Form {
@@ -24,6 +27,11 @@ struct DraftEditorView: View {
             Section("Message") {
                 TextEditor(text: $draft.text)
                     .frame(minHeight: 160)
+                HStack {
+                    Button { requestProposal() } label: { Label("Suggest", systemImage: "wand.and.stars") }
+                    Spacer()
+                    Button { generatePreview() } label: { Label("Preview", systemImage: "play.circle") }
+                }
             }
 
             Section("Note") {
@@ -39,6 +47,12 @@ struct DraftEditorView: View {
         .onChange(of: draft.text) { _, _ in touchAndSave() }
         .onChange(of: draft.mode) { _, _ in touchAndSave() }
         .onChange(of: draft.note) { _, _ in touchAndSave() }
+        .safeAreaInset(edge: .bottom) {
+            if let preview { DraftPreviewView(result: preview) }
+        }
+        .alert("Encode Error", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {
+            Button("OK", role: .cancel) {}
+        } message: { Text(errorMessage ?? "") }
     }
 
     private func touchAndSave() {
@@ -52,6 +66,26 @@ struct DraftEditorView: View {
         case .qr: return "QR"
         case .imageStego: return "Image"
         case .audioChirp: return "Audio"
+        }
+    }
+
+    private func requestProposal() {
+        let assistant = HeuristicAssistant()
+        let p = assistant.propose(for: draft.text)
+        proposal = p
+        draft.mode = p.mode
+        draft.updatedAt = .now
+        ContextSaver.shared.scheduleSave(modelContext)
+    }
+
+    private func generatePreview() {
+        Task.detached(priority: .userInitiated) {
+            do {
+                let result = try EncodeCoordinator().encode(draft: draft)
+                await MainActor.run { self.preview = result }
+            } catch {
+                await MainActor.run { self.errorMessage = String(describing: error) }
+            }
         }
     }
 }
@@ -75,4 +109,3 @@ private extension Binding where Value == String? {
     }
     .modelContainer(container)
 }
-
