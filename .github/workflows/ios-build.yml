@@ -28,7 +28,7 @@ jobs:
           xcodebuild -project Cryptic.xcodeproj \
             -configuration Debug \
             -sdk iphonesimulator \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
             -target Cryptic \
             CODE_SIGNING_ALLOWED=NO \
             build
@@ -39,8 +39,18 @@ jobs:
           xcodebuild -project Cryptic.xcodeproj \
             -configuration Debug \
             -sdk iphonesimulator \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
             -target CrypticTests -target CrypticUITests \
             CODE_SIGNING_ALLOWED=NO \
             build
 
+      - name: Run tests (Simulator)
+        run: |
+          set -euo pipefail
+          xcodebuild -project Cryptic.xcodeproj \
+            -scheme Cryptic \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            CODE_SIGNING_ALLOWED=NO \
+            test
