@@ -26,6 +26,7 @@ struct CrypticApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .autosaveModelContext()
         }
         .modelContainer(sharedModelContainer)
     }

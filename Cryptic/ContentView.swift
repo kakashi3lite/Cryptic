@@ -1,4 +1,4 @@
-//
+    //
 //  ContentView.swift
 //  Cryptic
 //
@@ -43,6 +43,7 @@ struct ContentView: View {
         withAnimation {
             let newItem = Item(timestamp: Date())
             modelContext.insert(newItem)
+            ContextSaver.shared.scheduleSave(modelContext)
         }
     }
 
@@ -51,6 +52,7 @@ struct ContentView: View {
             for index in offsets {
                 modelContext.delete(items[index])
             }
+            ContextSaver.shared.scheduleSave(modelContext)
         }
     }
 }
