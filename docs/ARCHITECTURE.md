@@ -46,8 +46,8 @@ Playful, privacy-first message encoding: emoji ciphers, QR, image-stego, and aud
 
 ## 7) Metal/DSP Details
 - Audio: windowed FFT (MPSGraph); magnitude thresholding; FEC interleave; pilot tone for sync.
-- Image: compute kernels per-tile; guard bands; DCT domain to preserve JPEG quality.
-- Perf budget: single command buffer/frame; reuse pipelines; avoid heap churn.
+- Image: compute kernels per-tile; guard bands; DCT domain to preserve JPEG quality. See `docs/context/ImageStego.metal.md` and `docs/context/MetalStegoProcessor.md`.
+- Perf budget: single command buffer/frame; reuse pipelines; avoid heap churn. See `docs/context/MetalGlassRenderer.md` and `docs/context/GlassEffects.metal.md`.
 
 ## 8) UX & Accessibility
 - Materials: `.ultraThinMaterial` with scrim overlays.
@@ -86,4 +86,3 @@ Playful, privacy-first message encoding: emoji ciphers, QR, image-stego, and aud
 ---
 
 See also: `docs/CONTEXT_SAVING.md` for SwiftData autosave guidance.
-

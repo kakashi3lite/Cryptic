@@ -14,6 +14,10 @@ Purpose: capture key decisions, constraints, and intent so future work stays coh
 - Optional protection: `docs/ENCRYPTION.md` (HKDF + ChaChaPoly envelope).
 - Product/tech framing: `docs/ARCHITECTURE.md` (KPIs, personas, system).
 
+## Component Context Cards
+- UI: `docs/context/PurpleGlassSystem.md`, `docs/context/GlassAnimationSystem.md`
+- Metal: `docs/context/MetalGlassRenderer.md`, `docs/context/GlassEffects.metal.md`, `docs/context/ImageStego.metal.md`, `docs/context/MetalStegoProcessor.md`
+
 ## Design Constraints
 - iOS 18+, SwiftUI-first UX; fast and responsive at 60fps.
 - On-device only content processing; explicit user action to share externally.
@@ -37,4 +41,3 @@ Purpose: capture key decisions, constraints, and intent so future work stays coh
 - Adopt custom UTType for `.cryptic` envelopes for better share UX?
 - Migrate to Xcode Cloud for TestFlight gating later?
 - Minimum viable decoder/import screen scope and UX copy?
-
